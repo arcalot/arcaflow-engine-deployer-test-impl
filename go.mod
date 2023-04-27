@@ -1,4 +1,4 @@
-module go.flow.arcalot.io/dockerdeployer
+module go.flow.arcalot.io/testdeployer
 
 go 1.18
 
