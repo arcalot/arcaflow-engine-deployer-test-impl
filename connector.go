@@ -80,7 +80,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	stdinSub, stdinWriter := newStdinSubstitute()
 	stdoutSub, stdoutReader := newStdoutSubstitute()
 
-	// TODO: run in a goroutine.
+	// TODO: Allow plugin crash simulation by terminating the ATP server early.
 	go func() {
 		err := atp.RunATPServer(ctx, stdinSub, stdoutSub, nil) // TODO: Fulfill schema.
 		if err != nil {
