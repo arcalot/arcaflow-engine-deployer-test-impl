@@ -3,6 +3,7 @@ package testimpl
 import (
 	"context"
 	"go.flow.arcalot.io/pluginsdk/atp"
+	"go.flow.arcalot.io/testdeployer/plugin"
 	"io"
 	"time"
 
@@ -30,11 +31,13 @@ func (p pluginConnection) Write(buf []byte) (n int, err error) {
 }
 
 func (p pluginConnection) Close() error {
-	panic("Not implemented. Careful to prevent goroutine leak")
+	//panic("Not implemented. Careful to prevent goroutine leak")
+
+	return nil
 }
 
 func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, error) {
-	c.logger.Infof("Mimicking deployment of a plugin with image %s for testing", image)
+	c.logger.Infof("Mimicking deployment of a plugin with image %s for testing.", image)
 
 	// Simulate how it takes time to start the deployment.
 	time.Sleep(time.Duration(c.config.DeployTime) * time.Millisecond)
@@ -44,7 +47,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 
 	// TODO: Allow plugin crash simulation by terminating the ATP server early.
 	go func() {
-		err := atp.RunATPServer(ctx, stdinSub, stdoutSub, nil) // TODO: Fulfill schema.
+		err := atp.RunATPServer(ctx, stdinSub, stdoutSub, plugin.GreetSchema) // TODO: Fulfill schema.
 		if err != nil {
 			c.logger.Errorf("Error while running ATP server %e", err)
 		}
@@ -54,8 +57,9 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 		writer: stdinWriter,
 		reader: stdoutReader,
 	}
-	// TODO: Close on pluginIO needs to shutdown ATP server.
 
+	// TODO: Close on pluginIO needs to shutdown ATP server.
+	defer stdoutSub.Close()
 	c.logger.Infof("Plugin initialized.")
 
 	return pluginIO, nil
