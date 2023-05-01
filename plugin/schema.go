@@ -3,10 +3,11 @@ package plugin
 import (
 	"fmt"
 	"go.flow.arcalot.io/pluginsdk/schema"
+	"time"
 )
 
 type Input struct {
-	DeployTime string `json:"deploy_time"`
+	WaitTime int `json:"wait_time"`
 }
 
 // We define a separate scope, so we can add subobjects later.
@@ -17,12 +18,12 @@ var inputSchema = schema.NewScopeSchema(
 		"input",
 		// Properties of the object:
 		map[string]*schema.PropertySchema{
-			"deploy_time": schema.NewPropertySchema(
+			"WaitTime": schema.NewPropertySchema(
 				// Type properties:
 				schema.NewIntSchema(schema.PointerTo[int64](1), nil, nil),
 				// Display metadata:
 				schema.NewDisplayValue(
-					schema.PointerTo("Deploy Time"),
+					schema.PointerTo("Wait Time"),
 					schema.PointerTo("How long to wait."),
 					nil,
 				),
@@ -69,16 +70,17 @@ var outputSchema = schema.NewScopeSchema(
 	),
 )
 
-func greet(input Input) (string, any) {
+func wait_(input Input) (string, any) {
+	time.Sleep(time.Duration(input.WaitTime) * time.Millisecond)
 	return "success", Output{
-		fmt.Sprintf("Mimicking deployment of a plugin for %s ms.", input.DeployTime),
+		fmt.Sprintf("Plugin waited for %s ms.", input.WaitTime),
 	}
 }
 
-var GreetSchema = schema.NewCallableSchema(
+var WaitSchema = schema.NewCallableSchema(
 	schema.NewCallableStep[Input](
 		// ID of the function:
-		"greet",
+		"wait_",
 		// Add the input schema:
 		inputSchema,
 		map[string]*schema.StepOutputSchema{
@@ -101,6 +103,6 @@ var GreetSchema = schema.NewCallableSchema(
 			nil,
 		),
 		// Reference the function
-		greet,
+		wait_,
 	),
 )

@@ -47,7 +47,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 
 	// TODO: Allow plugin crash simulation by terminating the ATP server early.
 	go func() {
-		err := atp.RunATPServer(ctx, stdinSub, stdoutSub, plugin.GreetSchema) // TODO: Fulfill schema.
+		err := atp.RunATPServer(ctx, stdinSub, stdoutSub, plugin.WaitSchema) // TODO: Fulfill schema.
 		if err != nil {
 			c.logger.Errorf("Error while running ATP server %e", err)
 		}
