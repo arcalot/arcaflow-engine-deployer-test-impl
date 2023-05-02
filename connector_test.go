@@ -3,18 +3,14 @@ package testimpl_test
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"go.arcalot.io/assert"
 	"go.arcalot.io/log/v2"
 	"go.flow.arcalot.io/pluginsdk/atp"
 	"go.flow.arcalot.io/testdeployer"
-	"gopkg.in/yaml.v3"
-	"os"
 	"testing"
 )
 
 func TestSimpleInOut(t *testing.T) {
-	// TODO
 	configJSON := `{"deploy_time": 2}`
 	var config any
 	if err := json.Unmarshal([]byte(configJSON), &config); err != nil {
@@ -37,73 +33,58 @@ func TestSimpleInOut(t *testing.T) {
 	})
 }
 
+// TestE2E tests running a single wait step by using the ATP server.
 func TestE2E(t *testing.T) {
-	//logConfig := log.Config{
-	//	Level:       log.LevelError,
-	//	Destination: log.DestinationStdout,
-	//}
-	//logger := log.New(
-	//	logConfig,
-	//)
+	// Inputs and parameters
 	image := "image-dummy"
-	file := "file-dummy"
 	stepID := "wait_"
+	input := map[string]any{"wait_time": 2}
 
+	// Sets up the factory
 	d := testimpl.NewFactory()
 	configSchema := d.ConfigurationSchema()
 	defaultConfig, err := configSchema.UnserializeType(map[string]any{})
-	if err != nil {
-		panic(err)
-	}
+	assert.NoError(t, err)
+
+	// Creates the connector, which gives us the testimpl's deployer
 	connector, err := d.Create(defaultConfig, log.New(log.Config{
 		Level:       log.LevelDebug,
 		Destination: log.DestinationStdout,
 	}))
-	if err != nil {
-		panic(err)
-	}
+	assert.NoError(t, err)
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+
+	// Fake deploys the plugin
 	plugin, err := connector.Deploy(ctx, image)
-	if err != nil {
-		panic(err)
-	}
+	assert.NoError(t, err)
 	defer func() {
-		if err := plugin.Close(); err != nil {
-			panic(err)
-		}
+		err := plugin.Close()
+		assert.NoError(t, err)
 	}()
 
+	// Connects to the plugin, then reads its schema
 	atpClient := atp.NewClient(plugin)
 	pluginSchema, err := atpClient.ReadSchema()
-	if err != nil {
-		panic(err)
-	}
+	assert.NoError(t, err)
+
+	// Gets the schema for the step
 	steps := pluginSchema.Steps()
 	step, ok := steps[stepID]
 	if !ok {
-		panic(fmt.Errorf("No such step: %s", stepID))
+		t.Fatalf("no such step: %s", stepID)
 	}
-	inputContents, err := os.ReadFile(file) //nolint:gosec
-	if err != nil {
-		panic(err)
-	}
-	input := map[string]any{}
-	if err := yaml.Unmarshal(inputContents, &input); err != nil {
-		panic(err)
-	}
-	if _, err := step.Input().Unserialize(input); err != nil {
-		panic(err)
-	}
-	outputID, outputData, debugLogs := atpClient.Execute(ctx, stepID, input)
-	output := map[string]any{
-		"outputID":   outputID,
-		"outputData": outputData,
-		"debugLogs":  debugLogs,
-	}
-	result, err := yaml.Marshal(output)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("%s", result)
+
+	assert.NoError(t, err)
+
+	_, err = step.Input().Unserialize(input)
+	assert.NoError(t, err)
+
+	// Executes the step and validates that the output is correct.
+	outputID, outputData, _ := atpClient.Execute(ctx, stepID, input)
+	assert.Equals(t, outputID, "success")
+	assert.Equals(t,
+		outputData.(map[interface{}]interface{}),
+		map[interface{}]interface{}{"message": "Plugin waited for 2 ms."})
 }

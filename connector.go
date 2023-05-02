@@ -68,7 +68,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 		c.logger.Debugf("ATP server execution finished in test deployer impl\n")
 	}()
 
-	pluginIO := pluginConnection{
+	pluginIO := &pluginConnection{
 		writer: stdinWriter,
 		reader: stdoutReader,
 	}

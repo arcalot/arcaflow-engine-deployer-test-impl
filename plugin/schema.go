@@ -73,7 +73,7 @@ var outputSchema = schema.NewScopeSchema(
 func wait_(input Input) (string, any) {
 	time.Sleep(time.Duration(input.WaitTime) * time.Millisecond)
 	return "success", Output{
-		fmt.Sprintf("Plugin waited for %s ms.", input.WaitTime),
+		fmt.Sprintf("Plugin waited for %d ms.", input.WaitTime),
 	}
 }
 
