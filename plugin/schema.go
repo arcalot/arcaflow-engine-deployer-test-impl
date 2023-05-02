@@ -18,7 +18,7 @@ var inputSchema = schema.NewScopeSchema(
 		"input",
 		// Properties of the object:
 		map[string]*schema.PropertySchema{
-			"WaitTime": schema.NewPropertySchema(
+			"wait_time": schema.NewPropertySchema(
 				// Type properties:
 				schema.NewIntSchema(schema.PointerTo[int64](1), nil, nil),
 				// Display metadata:
