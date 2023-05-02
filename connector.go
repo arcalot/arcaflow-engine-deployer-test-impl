@@ -18,8 +18,8 @@ type connector struct {
 
 // pluginConnection holds the IO for a plugin, and fulfills the deployer Plugin interface.
 type pluginConnection struct {
-	reader io.Reader
-	writer io.Writer
+	reader *io.PipeReader
+	writer *io.PipeWriter
 }
 
 func (p pluginConnection) Read(buf []byte) (n int, err error) {
@@ -32,7 +32,14 @@ func (p pluginConnection) Write(buf []byte) (n int, err error) {
 
 func (p pluginConnection) Close() error {
 	//panic("Not implemented. Careful to prevent goroutine leak")
-
+	err := p.reader.Close()
+	if err != nil {
+		return err
+	}
+	err = p.writer.Close()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -47,10 +54,12 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 
 	// TODO: Allow plugin crash simulation by terminating the ATP server early.
 	go func() {
-		err := atp.RunATPServer(ctx, stdinSub, stdoutSub, plugin.WaitSchema) // TODO: Fulfill schema.
+		c.logger.Debugf("Starting ATP server in test deployer impl\n")
+		err := atp.RunATPServer(ctx, stdinSub, stdoutSub, plugin.WaitSchema)
 		if err != nil {
 			c.logger.Errorf("Error while running ATP server %e", err)
 		}
+		c.logger.Debugf("ATP server execution finished in test deployer impl\n")
 	}()
 
 	pluginIO := pluginConnection{
@@ -58,8 +67,6 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 		reader: stdoutReader,
 	}
 
-	// TODO: Close on pluginIO needs to shutdown ATP server.
-	defer stdoutSub.Close()
 	c.logger.Infof("Plugin initialized.")
 
 	return pluginIO, nil
