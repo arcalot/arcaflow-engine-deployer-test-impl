@@ -58,6 +58,8 @@ go.flow.arcalot.io/pluginsdk v0.0.0-20221025073845-be663ec22293 h1:tuCGnU+3L8vZz
 go.flow.arcalot.io/pluginsdk v0.0.0-20221025073845-be663ec22293/go.mod h1:iblQl4Bx9gteegDXLD4WvU7S4Au0vkK6yKTc9mX00ls=
 go.flow.arcalot.io/pluginsdk v0.1.3 h1:o6v1YJmirRNcflh9ZQr5bMuhBavk8CzARjrNodU/XHA=
 go.flow.arcalot.io/pluginsdk v0.1.3/go.mod h1:ceY4HhUbnhZyQa3C7lXu25TNVCbsWGuYZapsV5RuIrk=
+go.flow.arcalot.io/pluginsdk v0.1.4-0.20230504042402-a8f9ff0bc949 h1:m6R+NF/f5d9zAVcNSf+4lTZqjsXpyDCWdn3RiV8euak=
+go.flow.arcalot.io/pluginsdk v0.1.4-0.20230504042402-a8f9ff0bc949/go.mod h1:ceY4HhUbnhZyQa3C7lXu25TNVCbsWGuYZapsV5RuIrk=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=

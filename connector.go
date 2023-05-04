@@ -21,26 +21,23 @@ type connector struct {
 type pluginConnection struct {
 	reader *io.PipeReader
 	writer *io.PipeWriter
+	cancel context.CancelFunc
 }
 
-func (p pluginConnection) Read(buf []byte) (n int, err error) {
+func (p *pluginConnection) Read(buf []byte) (n int, err error) {
 	return p.reader.Read(buf)
 }
 
-func (p pluginConnection) Write(buf []byte) (n int, err error) {
+func (p *pluginConnection) Write(buf []byte) (n int, err error) {
 	return p.writer.Write(buf)
 }
 
-func (p pluginConnection) Close() error {
-	//panic("Not implemented. Careful to prevent goroutine leak")
-	err := p.reader.Close()
-	if err != nil {
-		return err
-	}
-	err = p.writer.Close()
-	if err != nil {
-		return err
-	}
+func (p *pluginConnection) Close() error {
+	// Cancel the context that was sent to the ATP server.
+	// This will instruct it to finish up and close its stdin.
+	// You need to let it close it instead of closing it here, or else it will panic due to being unable to
+	// send the CBOR messages.
+	p.cancel()
 	return nil
 }
 
@@ -50,6 +47,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	// Simulate how it takes time to start the deployment.
 	time.Sleep(time.Duration(c.config.DeployTime) * time.Millisecond)
 
+	// Simulate stdin and stdout with simple pipes.
 	stdinSub, stdinWriter := io.Pipe()
 	stdoutReader, stdoutSub := io.Pipe()
 
@@ -58,10 +56,13 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	if err != nil {
 		return nil, err
 	}
+	// Set up the context to close the server when the deployer is closed.
+	subCtx, cancel := context.WithCancel(ctx)
 	fmt.Printf("%s\n", s)
 	go func() {
 		c.logger.Debugf("Starting ATP server in test deployer impl\n")
-		err := atp.RunATPServer(ctx, stdinSub, stdoutSub, plugin.WaitSchema)
+		// Just run the ATP server until the context is cancelled, or it completes. Whatever comes first.
+		err := atp.RunATPServer(subCtx, stdinSub, stdoutSub, plugin.WaitSchema)
 		if err != nil {
 			c.logger.Errorf("Error while running ATP server %e", err)
 		}
@@ -71,6 +72,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	pluginIO := &pluginConnection{
 		writer: stdinWriter,
 		reader: stdoutReader,
+		cancel: cancel,
 	}
 
 	c.logger.Infof("Plugin initialized.")
