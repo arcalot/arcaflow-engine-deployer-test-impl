@@ -75,9 +75,8 @@ func wait_(ctx context.Context, input Input) (string, any) {
 	start := time.Now()
 	select {
 	case <-time.After(time.Duration(input.WaitTime) * time.Millisecond):
-		duration := time.Since(start)
 		return "success", Output{
-			fmt.Sprintf("Plugin waited for %d ms after sleeping for %d ms.", duration.Milliseconds(), input.WaitTime),
+			fmt.Sprintf("Plugin slept for %d ms.", input.WaitTime),
 		}
 	case <-ctx.Done(): // Cancelled
 		duration := time.Since(start)

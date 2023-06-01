@@ -86,5 +86,5 @@ func TestE2E(t *testing.T) {
 	assert.Equals(t, outputID, "success")
 	assert.Equals(t,
 		outputData.(map[interface{}]interface{}),
-		map[interface{}]interface{}{"message": "Plugin waited for 2 ms after sleeping for 2 ms."})
+		map[interface{}]interface{}{"message": "Plugin slept for 2 ms."})
 }
