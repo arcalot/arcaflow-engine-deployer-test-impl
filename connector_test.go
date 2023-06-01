@@ -66,7 +66,7 @@ func TestE2E(t *testing.T) {
 
 	// Connects to the plugin, then reads its schema
 	atpClient := atp.NewClient(plugin)
-	pluginSchema, err := atpClient.ReadSchema(nil)
+	pluginSchema, err := atpClient.ReadSchema()
 	assert.NoError(t, err)
 
 	// Gets the schema for the step
@@ -82,7 +82,7 @@ func TestE2E(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Executes the step and validates that the output is correct.
-	outputID, outputData, _ := atpClient.Execute(ctx, stepID, input)
+	outputID, outputData, _ := atpClient.Execute(stepID, input)
 	assert.Equals(t, outputID, "success")
 	assert.Equals(t,
 		outputData.(map[interface{}]interface{}),
