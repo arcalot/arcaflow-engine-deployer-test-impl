@@ -6,7 +6,7 @@ import (
 	"go.flow.arcalot.io/pluginsdk/schema"
 )
 
-// NewFactory creates a new factory for the Docker deployer.
+// NewFactory creates a new factory for the test deployer.
 func NewFactory() deployer.ConnectorFactory[*Config] {
 	return &factory{}
 }
