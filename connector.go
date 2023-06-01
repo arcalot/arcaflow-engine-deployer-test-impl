@@ -2,7 +2,6 @@ package testimpl
 
 import (
 	"context"
-	"fmt"
 	"go.flow.arcalot.io/pluginsdk/atp"
 	"go.flow.arcalot.io/testdeployer/plugin"
 	"io"
@@ -52,13 +51,8 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	stdoutReader, stdoutSub := io.Pipe()
 
 	// TODO: Allow plugin crash simulation by terminating the ATP server early.
-	s, err := plugin.WaitSchema.SelfSerialize()
-	if err != nil {
-		return nil, err
-	}
 	// Set up the context to close the server when the deployer is closed.
 	subCtx, cancel := context.WithCancel(ctx)
-	fmt.Printf("%s\n", s)
 	go func() {
 		c.logger.Debugf("Starting ATP server in test deployer impl\n")
 		// Just run the ATP server until the context is cancelled, or it completes. Whatever comes first.

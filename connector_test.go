@@ -37,8 +37,8 @@ func TestSimpleInOut(t *testing.T) {
 func TestE2E(t *testing.T) {
 	// Inputs and parameters
 	image := "image-dummy"
-	stepID := "wait_"
-	input := map[string]any{"wait_time": 2}
+	stepID := "wait"
+	input := map[string]any{"wait_time_ms": 2}
 
 	// Sets up the factory
 	d := testimpl.NewFactory()
@@ -82,9 +82,9 @@ func TestE2E(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Executes the step and validates that the output is correct.
-	outputID, outputData, _ := atpClient.Execute(ctx, stepID, input)
+	outputID, outputData, _ := atpClient.Execute(stepID, input)
 	assert.Equals(t, outputID, "success")
 	assert.Equals(t,
 		outputData.(map[interface{}]interface{}),
-		map[interface{}]interface{}{"message": "Plugin waited for 2 ms."})
+		map[interface{}]interface{}{"message": "Plugin slept for 2 ms."})
 }
