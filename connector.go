@@ -21,6 +21,7 @@ type pluginConnection struct {
 	reader *io.PipeReader
 	writer *io.PipeWriter
 	cancel context.CancelFunc
+	id     string
 }
 
 func (p *pluginConnection) Read(buf []byte) (n int, err error) {
@@ -38,6 +39,10 @@ func (p *pluginConnection) Close() error {
 	// send the CBOR messages.
 	p.cancel()
 	return nil
+}
+
+func (p *pluginConnection) ID() string {
+	return p.id
 }
 
 func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, error) {
@@ -67,6 +72,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 		writer: stdinWriter,
 		reader: stdoutReader,
 		cancel: cancel,
+		id:     image,
 	}
 
 	c.logger.Infof("Plugin initialized.")
