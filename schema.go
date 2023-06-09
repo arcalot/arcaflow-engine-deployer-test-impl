@@ -11,7 +11,8 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 		map[string]*schema.PropertySchema{
 			"deploy_time": schema.NewPropertySchema(
 				schema.NewIntSchema(schema.PointerTo(int64(0)), schema.PointerTo(int64(3600000)), nil),
-				schema.NewDisplayValue(schema.PointerTo("Deploy Time"), schema.PointerTo("How long to wait when fake deploying"), nil),
+				schema.NewDisplayValue(schema.PointerTo("Deploy Time"),
+					schema.PointerTo("How long to wait when fake deploying"), nil),
 				false,
 				nil,
 				nil,
@@ -19,6 +20,16 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				schema.PointerTo("0"),
 				nil,
 			),
+			"succeed": schema.NewPropertySchema(
+				schema.NewBoolSchema(),
+				schema.NewDisplayValue(schema.PointerTo("Succeed"),
+					schema.PointerTo("Should the deployment succeed?"), nil),
+				false,
+				nil,
+				nil,
+				nil,
+				schema.PointerTo("true"),
+				nil),
 		},
 	),
 )

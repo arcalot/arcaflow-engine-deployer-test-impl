@@ -2,6 +2,7 @@ package testimpl
 
 import (
 	"context"
+	"fmt"
 	"go.flow.arcalot.io/pluginsdk/atp"
 	testplugin "go.flow.arcalot.io/testplugin"
 	"io"
@@ -50,6 +51,10 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 
 	// Simulate how it takes time to start the deployment.
 	time.Sleep(time.Duration(c.config.DeployTime) * time.Millisecond)
+
+	if !c.config.Succeed {
+		return nil, fmt.Errorf("intentional deployment fail after %d ms", c.config.DeployTime)
+	}
 
 	// Simulate stdin and stdout with simple pipes.
 	stdinSub, stdinWriter := io.Pipe()
