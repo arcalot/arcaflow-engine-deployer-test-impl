@@ -103,7 +103,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 		c.logger.Debugf("ATP server execution finished in test deployer impl\n")
 	}()
 
-	if c.config.RunSucceed == false {
+	if c.config.DisablePluginWrites == true {
 		return &badConnection{
 			writer: stdinWriter,
 			reader: stdoutReader,
