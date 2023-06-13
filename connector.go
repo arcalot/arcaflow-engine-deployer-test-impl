@@ -3,7 +3,7 @@ package testimpl
 import (
 	"context"
 	"go.flow.arcalot.io/pluginsdk/atp"
-	"go.flow.arcalot.io/testdeployer/plugin"
+	testplugin "go.flow.arcalot.io/testplugin"
 	"io"
 	"time"
 
@@ -61,7 +61,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	go func() {
 		c.logger.Debugf("Starting ATP server in test deployer impl\n")
 		// Just run the ATP server until the context is cancelled, or it completes. Whatever comes first.
-		err := atp.RunATPServer(subCtx, stdinSub, stdoutSub, plugin.WaitSchema)
+		err := atp.RunATPServer(subCtx, stdinSub, stdoutSub, testplugin.WaitSchema)
 		if err != nil {
 			c.logger.Errorf("Error while running ATP server %e", err)
 		}
