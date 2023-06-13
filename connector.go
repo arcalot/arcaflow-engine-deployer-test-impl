@@ -46,6 +46,36 @@ func (p *pluginConnection) ID() string {
 	return p.id
 }
 
+// badConnection holds the IO for a plugin, and fulfills the deployer Plugin interface.
+type badConnection struct {
+	reader *io.PipeReader
+	writer *io.PipeWriter
+	cancel context.CancelFunc
+	id     string
+}
+
+func (p *badConnection) Read(buf []byte) (n int, err error) {
+	return p.reader.Read(buf)
+}
+
+func (p *badConnection) Write(buf []byte) (n int, err error) {
+	//return p.writer.Write(buf)
+	return 0, fmt.Errorf("bad connection to writer")
+}
+
+func (p *badConnection) Close() error {
+	// Cancel the context that was sent to the ATP server.
+	// This will instruct it to finish up and close its stdin.
+	// You need to let it close it instead of closing it here, or else it will panic due to being unable to
+	// send the CBOR messages.
+	p.cancel()
+	return nil
+}
+
+func (p *badConnection) ID() string {
+	return p.id
+}
+
 func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, error) {
 	c.logger.Infof("Mimicking deployment of a plugin with image %s for testing.", image)
 
@@ -72,6 +102,15 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 		}
 		c.logger.Debugf("ATP server execution finished in test deployer impl\n")
 	}()
+
+	if c.config.RunSucceed == false {
+		return &badConnection{
+			writer: stdinWriter,
+			reader: stdoutReader,
+			cancel: cancel,
+			id:     image,
+		}, nil
+	}
 
 	pluginIO := &pluginConnection{
 		writer: stdinWriter,

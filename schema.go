@@ -30,6 +30,16 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				nil,
 				schema.PointerTo("true"),
 				nil),
+			"run_succeed": schema.NewPropertySchema(
+				schema.NewBoolSchema(),
+				schema.NewDisplayValue(schema.PointerTo("Run Succeed"),
+					schema.PointerTo("Should the run succeed?"), nil),
+				false,
+				nil,
+				nil,
+				nil,
+				schema.PointerTo("true"),
+				nil),
 		},
 	),
 )
