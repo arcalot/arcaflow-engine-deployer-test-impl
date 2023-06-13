@@ -10,4 +10,6 @@ go.flow.arcalot.io/deployer v0.1.0 h1:5lcCN6rQD2dp2hkaW6dInaBoyKzWt8/kzJnDjeRAoL
 go.flow.arcalot.io/deployer v0.1.0/go.mod h1:xVSB+svHVPmX6yTZIU0K4U/pDbs+rezsWa69vYA+E6k=
 go.flow.arcalot.io/pluginsdk v0.3.0-beta.1 h1:RrC5SKDkhwG/enE/FajAxRF1izET61/LO4lhaI9q094=
 go.flow.arcalot.io/pluginsdk v0.3.0-beta.1/go.mod h1:7cEk8LSxpZakyfrmKTPbiMhlrZvWtCPYcaI7qfSu8MM=
+go.flow.arcalot.io/testplugin v0.0.0-20230613211321-b9c54347be27 h1:NOaMRCcgix1HkI5iWcmxP0NlGyVlWJ/dAGY7/QOcW90=
+go.flow.arcalot.io/testplugin v0.0.0-20230613211321-b9c54347be27/go.mod h1:RsEWotEbX4irH+OM/d3dUOZMhHeBDDhqUymIKqZlESU=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
