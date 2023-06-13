@@ -20,9 +20,9 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				schema.PointerTo("0"),
 				nil,
 			),
-			"succeed": schema.NewPropertySchema(
+			"deploy_succeed": schema.NewPropertySchema(
 				schema.NewBoolSchema(),
-				schema.NewDisplayValue(schema.PointerTo("Succeed"),
+				schema.NewDisplayValue(schema.PointerTo("DeploySucceed"),
 					schema.PointerTo("Should the deployment succeed?"), nil),
 				false,
 				nil,

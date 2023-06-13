@@ -4,7 +4,7 @@ package testimpl
 type Config struct {
 	// The number of seconds it should wait while deploying to mimic a real deployer.
 	DeployTime          int32 `json:"deploy_time"`
-	Succeed             bool  `json:"succeed"`
+	DeploySucceed       bool  `json:"deploy_succeed"`
 	DisablePluginWrites bool  `json:"disable_plugin_writes""`
 }
 

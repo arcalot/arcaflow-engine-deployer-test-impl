@@ -82,7 +82,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	// Simulate how it takes time to start the deployment.
 	time.Sleep(time.Duration(c.config.DeployTime) * time.Millisecond)
 
-	if !c.config.Succeed {
+	if !c.config.DeploySucceed {
 		return nil, fmt.Errorf("intentional deployment fail after %d ms", c.config.DeployTime)
 	}
 
