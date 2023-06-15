@@ -3,7 +3,9 @@ package testimpl
 // Config is the configuration structure of the Docker connector.
 type Config struct {
 	// The number of seconds it should wait while deploying to mimic a real deployer.
-	DeployTime int32 `json:"deploy_time"`
+	DeployTime          int32 `json:"deploy_time"`
+	DeploySucceed       bool  `json:"deploy_succeed"`
+	DisablePluginWrites bool  `json:"disable_plugin_writes"`
 }
 
 // Validate checks the configuration structure for conformance with the schema.
