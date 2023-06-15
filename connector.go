@@ -59,7 +59,6 @@ func (p *badConnection) Read(buf []byte) (n int, err error) {
 }
 
 func (p *badConnection) Write(buf []byte) (n int, err error) {
-	//return p.writer.Write(buf)
 	return 0, fmt.Errorf("bad connection to writer")
 }
 
