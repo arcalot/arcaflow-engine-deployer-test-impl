@@ -12,7 +12,7 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 			"deploy_time": schema.NewPropertySchema(
 				schema.NewIntSchema(schema.PointerTo(int64(0)), schema.PointerTo(int64(3600000)), nil),
 				schema.NewDisplayValue(schema.PointerTo("Deploy Time"),
-					schema.PointerTo("How long to wait when fake deploying"), nil),
+					schema.PointerTo("How long to wait when fake deploying in ms"), nil),
 				false,
 				nil,
 				nil,
