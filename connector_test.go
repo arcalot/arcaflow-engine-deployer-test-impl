@@ -6,6 +6,7 @@ import (
 	"go.arcalot.io/assert"
 	"go.arcalot.io/log/v2"
 	"go.flow.arcalot.io/pluginsdk/atp"
+	"go.flow.arcalot.io/pluginsdk/schema"
 	"go.flow.arcalot.io/testdeployer"
 	"testing"
 )
@@ -79,9 +80,15 @@ func TestE2E(t *testing.T) {
 
 	_, err = step.Input().Unserialize(input)
 	assert.NoError(t, err)
+	receivedSignalsChan := make(chan schema.Input)
+	emittedSignalsChan := make(chan schema.Input)
 
 	// Executes the step and validates that the output is correct.
-	outputID, outputData, _ := atpClient.Execute(stepID, input)
+	outputID, outputData, _ := atpClient.Execute(
+		schema.Input{ID: stepID, InputData: input},
+		receivedSignalsChan,
+		emittedSignalsChan,
+	)
 	assert.Equals(t, outputID, "success")
 	assert.Equals(t,
 		outputData.(map[interface{}]interface{}),
