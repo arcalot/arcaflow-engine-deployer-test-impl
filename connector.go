@@ -41,6 +41,7 @@ func (p *pluginConnection) Close() error {
 	// You need to let it close it instead of closing it here, or else it will panic due to being unable to
 	// send the CBOR messages.
 	p.cancel()
+	p.wg.Wait()
 	return nil
 }
 
@@ -96,6 +97,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	pluginCtx, cancel := context.WithCancel(context.Background())
 	wg := sync.WaitGroup{}
 	go func() {
+		wg.Add(1)
 		c.logger.Debugf("Starting ATP server in test deployer impl\n")
 		// Just run the ATP server until the context is cancelled, or it completes. Whatever comes first.
 		schemaClone := *testplugin.TestStepsSchema
@@ -103,9 +105,8 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 		if err != nil {
 			c.logger.Errorf("Error while running ATP server %e", err)
 		}
-		// Apparently this line can cause a panic due to logging after the test is completed.
-		// Added sleep to close to prevent that.
 		c.logger.Debugf("ATP server execution finished in test deployer impl\n")
+		wg.Done()
 	}()
 
 	if c.config.DisablePluginWrites {
