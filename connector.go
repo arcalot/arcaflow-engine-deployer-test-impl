@@ -96,8 +96,8 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	// Give the plugin an independent context, so it can handle itself.
 	pluginCtx, cancel := context.WithCancel(context.Background())
 	wg := sync.WaitGroup{}
+	wg.Add(1) // For the goroutine
 	go func() {
-		wg.Add(1)
 		c.logger.Debugf("Starting ATP server in test deployer impl\n")
 		// Just run the ATP server until the context is cancelled, or it completes. Whatever comes first.
 		schemaClone := *testplugin.TestStepsSchema
