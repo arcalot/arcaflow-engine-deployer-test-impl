@@ -6,6 +6,7 @@ import (
 	"go.flow.arcalot.io/pluginsdk/atp"
 	testplugin "go.flow.arcalot.io/testplugin"
 	"io"
+	"sync"
 	"time"
 
 	log "go.arcalot.io/log/v2"
@@ -22,6 +23,7 @@ type pluginConnection struct {
 	reader *io.PipeReader
 	writer *io.PipeWriter
 	cancel context.CancelFunc
+	wg     *sync.WaitGroup
 	id     string
 }
 
@@ -39,6 +41,7 @@ func (p *pluginConnection) Close() error {
 	// You need to let it close it instead of closing it here, or else it will panic due to being unable to
 	// send the CBOR messages.
 	p.cancel()
+	p.wg.Wait()
 	return nil
 }
 
@@ -90,16 +93,20 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	stdoutReader, stdoutSub := io.Pipe()
 
 	// TODO: Allow plugin crash simulation by terminating the ATP server early.
-	// Set up the context to close the server when the deployer is closed.
-	subCtx, cancel := context.WithCancel(ctx)
+	// Give the plugin an independent context, so it can handle itself.
+	pluginCtx, cancel := context.WithCancel(context.Background())
+	wg := sync.WaitGroup{}
+	wg.Add(1) // For the goroutine
 	go func() {
 		c.logger.Debugf("Starting ATP server in test deployer impl\n")
 		// Just run the ATP server until the context is cancelled, or it completes. Whatever comes first.
-		err := atp.RunATPServer(subCtx, stdinSub, stdoutSub, testplugin.WaitSchema)
+		schemaClone := *testplugin.TestStepsSchema
+		err := atp.RunATPServer(pluginCtx, stdinSub, stdoutSub, &schemaClone)
 		if err != nil {
 			c.logger.Errorf("Error while running ATP server %e", err)
 		}
 		c.logger.Debugf("ATP server execution finished in test deployer impl\n")
+		wg.Done()
 	}()
 
 	if c.config.DisablePluginWrites {
@@ -115,6 +122,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 		writer: stdinWriter,
 		reader: stdoutReader,
 		cancel: cancel,
+		wg:     &wg,
 		id:     image,
 	}
 
