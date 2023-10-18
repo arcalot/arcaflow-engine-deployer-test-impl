@@ -18,6 +18,10 @@ func (f factory) ID() string {
 	return "test-impl"
 }
 
+func (f factory) DeploymentType() deployer.DeploymentType {
+	return "stub"
+}
+
 func (f factory) ConfigurationSchema() *schema.TypedScopeSchema[*Config] {
 	return Schema
 }
