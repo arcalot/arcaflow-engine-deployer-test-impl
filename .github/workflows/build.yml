@@ -27,13 +27,6 @@ jobs:
           go-version: 1.18
       - name: Set up gotestfmt
         uses: GoTestTools/gotestfmt-action@v2
-      - uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3
-        with:
-          path: |
-            ~/go/pkg/mod
-            ~/.cache/go-build
-          key: go-test-${{ hashFiles('**/go.sum') }}
-          restore-keys: go-test-
       - name: Run go test
         run: |
           set -euo pipefail
