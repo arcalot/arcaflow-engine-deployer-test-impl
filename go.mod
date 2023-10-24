@@ -7,7 +7,7 @@ require (
 	go.arcalot.io/log/v2 v2.0.0
 	go.flow.arcalot.io/deployer v0.2.0
 	go.flow.arcalot.io/pluginsdk v0.5.0-beta.2
-	go.flow.arcalot.io/testplugin v0.2.0
+	go.flow.arcalot.io/testplugin v0.2.1
 )
 
 require (
