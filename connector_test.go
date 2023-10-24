@@ -84,13 +84,15 @@ func TestE2E(t *testing.T) {
 	emittedSignalsChan := make(chan schema.Input)
 
 	// Executes the step and validates that the output is correct.
-	outputID, outputData, _ := atpClient.Execute(
-		schema.Input{ID: stepID, InputData: input},
+	executionResult := atpClient.Execute(
+		schema.Input{RunID: t.Name(), ID: stepID, InputData: input},
 		receivedSignalsChan,
 		emittedSignalsChan,
 	)
-	assert.Equals(t, outputID, "success")
+	assert.NoError(t, atpClient.Close())
+	assert.NoError(t, executionResult.Error)
+	assert.Equals(t, executionResult.OutputID, "success")
 	assert.Equals(t,
-		outputData.(map[interface{}]interface{}),
+		executionResult.OutputData.(map[interface{}]interface{}),
 		map[interface{}]interface{}{"message": "Plugin slept for 2 ms."})
 }
