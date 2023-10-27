@@ -19,7 +19,7 @@ func (f factory) ID() string {
 }
 
 func (f factory) DeploymentType() deployer.DeploymentType {
-	return "stub"
+	return "builtin"
 }
 
 func (f factory) ConfigurationSchema() *schema.TypedScopeSchema[*Config] {
