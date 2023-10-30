@@ -41,6 +41,11 @@ func (p *pluginConnection) Close() error {
 	// You need to let it close it instead of closing it here, or else it will panic due to being unable to
 	// send the CBOR messages.
 	p.cancel()
+	readerCloseErr := p.reader.Close()
+	writerCloseErr := p.writer.Close()
+	if readerCloseErr != nil || writerCloseErr != nil {
+		return fmt.Errorf("error while closing pipes (%s) (%s)", readerCloseErr, writerCloseErr)
+	}
 	p.wg.Wait()
 	return nil
 }
@@ -101,9 +106,12 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 		c.logger.Debugf("Starting ATP server in test deployer impl\n")
 		// Just run the ATP server until the context is cancelled, or it completes. Whatever comes first.
 		schemaClone := *testplugin.TestStepsSchema
-		err := atp.RunATPServer(pluginCtx, stdinSub, stdoutSub, &schemaClone)
-		if err != nil {
-			c.logger.Errorf("Error while running ATP server %e", err)
+		errs := atp.RunATPServer(pluginCtx, stdinSub, stdoutSub, &schemaClone)
+		if len(errs) > 0 {
+			c.logger.Errorf("%d errors while running ATP server", len(errs))
+			for _, err := range errs {
+				c.logger.Errorf("error while running ATP server: %w", err)
+			}
 		}
 		c.logger.Debugf("ATP server execution finished in test deployer impl\n")
 		wg.Done()
