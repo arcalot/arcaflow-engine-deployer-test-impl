@@ -3,6 +3,7 @@ package testimpl_test
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"go.arcalot.io/assert"
 	"go.arcalot.io/log/v2"
 	"go.flow.arcalot.io/pluginsdk/atp"
@@ -36,9 +37,11 @@ func TestSimpleInOut(t *testing.T) {
 // TestE2E tests running a single wait step by using the ATP server.
 func TestE2E(t *testing.T) {
 	// Inputs and parameters
-	image := "image-dummy"
+	image := "image-stub"
 	stepID := "wait"
-	input := map[string]any{"wait_time_ms": 2}
+	input := map[string]any{
+		"wait_time_ms": 2,
+		"my_pattern":   "^[a-z]+$"}
 
 	// Sets up the factory
 	d := testimpl.NewFactory()
@@ -78,7 +81,8 @@ func TestE2E(t *testing.T) {
 
 	assert.NoError(t, err)
 
-	_, err = step.Input().Unserialize(input)
+	ui, err := step.Input().Unserialize(input)
+	fmt.Printf("%v\n", ui)
 	assert.NoError(t, err)
 	receivedSignalsChan := make(chan schema.Input)
 	emittedSignalsChan := make(chan schema.Input)
