@@ -1,4 +1,4 @@
-FROM quay.io/centos/centos:stream8@sha256:b1f6889548eda34b2ddc8c2f50a49bf9924164814308e41e90a07e3b30e0db7f
+FROM quay.io/centos/centos:stream8@sha256:f47f028f2ad182b6784c1fecc963cb4e5914f70e413a1a4fe852f92bf855c17d
 
 COPY io_test_script.bash /
 
