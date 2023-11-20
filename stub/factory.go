@@ -15,7 +15,7 @@ type factory struct {
 }
 
 func (f factory) Name() string {
-	return "stub"
+	return "test-stub"
 }
 
 func (f factory) DeploymentType() deployer.DeploymentType {
