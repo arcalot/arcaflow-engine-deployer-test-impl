@@ -40,8 +40,7 @@ func TestE2E(t *testing.T) {
 	image := "image-stub"
 	stepID := "wait"
 	input := map[string]any{
-		"wait_time_ms": 2,
-		"my_pattern":   "^[a-z]+$"}
+		"wait_time_ms": 2}
 
 	// Sets up the factory
 	d := testimpl.NewFactory()
