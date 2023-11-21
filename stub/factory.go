@@ -19,7 +19,7 @@ func (f factory) Name() string {
 }
 
 func (f factory) DeploymentType() deployer.DeploymentType {
-	return "test-double"
+	return "stubby"
 }
 
 func (f factory) ConfigurationSchema() *schema.TypedScopeSchema[*Config] {
