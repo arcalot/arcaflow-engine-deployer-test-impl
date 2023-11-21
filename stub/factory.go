@@ -27,9 +27,5 @@ func (f factory) ConfigurationSchema() *schema.TypedScopeSchema[*Config] {
 }
 
 func (f factory) Create(config *Config, logger log.Logger) (deployer.Connector, error) {
-	//return &connector{
-	//	config,
-	//	logger,
-	//}, nil
 	return nil, nil
 }
