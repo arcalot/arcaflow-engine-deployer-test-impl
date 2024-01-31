@@ -2,6 +2,7 @@ package testimpl
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"go.flow.arcalot.io/pluginsdk/atp"
 	testplugin "go.flow.arcalot.io/testplugin"
@@ -44,7 +45,7 @@ func (p *pluginConnection) Close() error {
 	readerCloseErr := p.reader.Close()
 	writerCloseErr := p.writer.Close()
 	if readerCloseErr != nil || writerCloseErr != nil {
-		return fmt.Errorf("error while closing pipes (%s) (%s)", readerCloseErr, writerCloseErr)
+		return fmt.Errorf("error while closing pipes (%w)", errors.Join(readerCloseErr, writerCloseErr))
 	}
 	p.wg.Wait()
 	return nil
@@ -97,7 +98,6 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	stdinSub, stdinWriter := io.Pipe()
 	stdoutReader, stdoutSub := io.Pipe()
 
-	// TODO: Allow plugin crash simulation by terminating the ATP server early.
 	// Give the plugin an independent context, so it can handle itself.
 	pluginCtx, cancel := context.WithCancel(context.Background())
 	wg := sync.WaitGroup{}
