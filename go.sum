@@ -18,8 +18,8 @@ go.flow.arcalot.io/deployer v0.5.0 h1:yXYogvL3shNBEEoTx9U9CNbfxuf8777uAH5Vn3hv1Y
 go.flow.arcalot.io/deployer v0.5.0/go.mod h1:whj8wOUursCnfZCt1a7eY5hU3EyOcUG48vM4NeAe5N8=
 go.flow.arcalot.io/pluginsdk v0.8.0 h1:cShsshrR17ZFLcbgi3aZvqexLttcp3JISFNqPUPuDvA=
 go.flow.arcalot.io/pluginsdk v0.8.0/go.mod h1:sk7ssInR/T+Gy+RSRr+QhKqZcECFFxMyn1hPQCTZSyU=
-go.flow.arcalot.io/testplugin v0.4.0 h1:BbYZVPYT9VZItZEuAPY39b9wC33ylZvUDs5BG6t1m2Y=
-go.flow.arcalot.io/testplugin v0.4.0/go.mod h1:v/+aNhxb4hC+OKFRJnKaalDaK40ozqZoFNCVq3gJMLU=
+go.flow.arcalot.io/testplugin v0.4.1 h1:czJFi2kg54as9qVbDPW4cjrRcF3lyKyPlBew+Fmy5sE=
+go.flow.arcalot.io/testplugin v0.4.1/go.mod h1:yU+8dTuaqPlxNkceLN9AOAwe5lG+nsztCZYgEMmw3sc=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntNwaWcugrBjAiHlqqRiVk=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c/go.mod h1:JHkPIbrfpd72SG/EVd6muEfDQjcINNoR0C8j2r3qZ4Q=
