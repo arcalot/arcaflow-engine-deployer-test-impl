@@ -92,6 +92,7 @@ func TestE2E(t *testing.T) {
 		receivedSignalsChan,
 		emittedSignalsChan,
 	)
+	close(receivedSignalsChan) // We are done with this. This is required to close the ATP client.
 	assert.NoError(t, atpClient.Close())
 	assert.NoError(t, executionResult.Error)
 	assert.Equals(t, executionResult.OutputID, "success")
