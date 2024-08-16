@@ -105,7 +105,7 @@ func (c *connector) Deploy(ctx context.Context, image string) (deployer.Plugin, 
 	go func() {
 		c.logger.Debugf("Starting ATP server in test deployer impl\n")
 		// Just run the ATP server until the context is cancelled, or it completes. Whatever comes first.
-		schemaClone := *testplugin.TestStepsSchema
+		schemaClone := *testplugin.GetSchema()
 		errs := atp.RunATPServer(pluginCtx, stdinSub, stdoutSub, &schemaClone)
 		if len(errs) > 0 {
 			c.logger.Errorf("%d errors while running ATP server", len(errs))
