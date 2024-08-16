@@ -18,8 +18,8 @@ go.flow.arcalot.io/deployer v0.6.1 h1:Q65VHeRZzdrMJZqTRb26EQZQbK+C3pORETVlpw02xW
 go.flow.arcalot.io/deployer v0.6.1/go.mod h1:Oh+71KYQEof6IS3UGhpMyjQQPRcuomUccn7fwAqrPxE=
 go.flow.arcalot.io/pluginsdk v0.12.5 h1:9b3pKeoHCRH4yF2xIdu8L7SqNUYJFxTsk8L5+inR1xw=
 go.flow.arcalot.io/pluginsdk v0.12.5/go.mod h1:5kMCVigP89J/KU5T72EAczQXPWXZkRfUFcpnIkOECV8=
-go.flow.arcalot.io/testplugin v0.4.1 h1:czJFi2kg54as9qVbDPW4cjrRcF3lyKyPlBew+Fmy5sE=
-go.flow.arcalot.io/testplugin v0.4.1/go.mod h1:yU+8dTuaqPlxNkceLN9AOAwe5lG+nsztCZYgEMmw3sc=
+go.flow.arcalot.io/testplugin v0.4.2 h1:JTS8AIXntJOuwTfXwUmrXV2v2Wk7z48TYvC52fJPdkE=
+go.flow.arcalot.io/testplugin v0.4.2/go.mod h1:yU+8dTuaqPlxNkceLN9AOAwe5lG+nsztCZYgEMmw3sc=
 golang.org/x/sys v0.24.0 h1:Twjiwq9dn6R1fQcyiK+wQyHWfaz/BJB+YIpzU/Cv3Xg=
 golang.org/x/sys v0.24.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
 golang.org/x/term v0.23.0 h1:F6D4vR+EHoL9/sWAWgAR1H2DcHr4PareCbAaCo1RpuU=
