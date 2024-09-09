@@ -1,6 +1,6 @@
 module go.flow.arcalot.io/testdeployer
 
-go 1.21
+go 1.22.0
 
 require (
 	go.arcalot.io/assert v1.8.0
