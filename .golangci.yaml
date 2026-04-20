@@ -1,12 +1,10 @@
+version: "2"
 run:
   timeout: 5m
 linters:
   enable:
     # region General
 
-    # Add depguard to prevent adding additional dependencies. This is a client library, we really don't want
-    # additional dependencies.
-    - depguard
     # Prevent improper directives in go.mod.
     - gomoddirectives
     # Prevent improper nolint directives.
@@ -32,6 +30,8 @@ linters:
     - godox
     # Keep the cyclomatic complexity of functions to a reasonable level.
     - gocyclo
+    # Complain about cognitive complexity of functions.
+    - gocognit
     # Find repeated strings that could be converted into constants.
     - goconst
     # Complain about unnecessary type conversions.
@@ -45,12 +45,13 @@ linters:
     # Check for duplicate code. You may want to disable this with // nolint:dupl if the source code is the same, but
     # legitimately exists for different reasons.
     - dupl
+    # Enforce a reasonable function length of 60 lines or 40 instructions. In very rare cases you may want to disable
+    # this with // nolint:funlen if there is absolutely no way to split the function in question.
+    - funlen
     # Prevent dogsledding (mass-ignoring return values). This typically indicates missing error handling.
     - dogsled
     # Enforce consistent import aliases across all files.
     - importas
-    # Make code properly formatted.
-    - gofmt
     # Prevent faulty error checks.
     - nilerr
     # Prevent direct error checks that won't work with wrapped errors.
@@ -59,35 +60,18 @@ linters:
     - prealloc
     # Check for improper duration handling.
     - durationcheck
+    # Enforce tests being in the _test package.
+    - testpackage
 
     # endregion
-linters-settings:
-  depguard:
-    rules:
-      main:
-        list-mode: strict
-        files:
-          - "**/internal/*.go"
-        allow:
-          - $gostd
-          - go.flow.arcalot.io/
-          - go.arcalot.io/
-          - github.com/docker/
-          - github.com/opencontainers/
-          - gopkg.in/yaml.v3
-          - github.com/fxamacker/cbor
-          - k8s.io/
-          - sigs.k8s.io/
-          - golang.org/
-          - github.com/stretchr/testify
-  govet:
-    enable-all: true
-    disable:
-      # We don't care about variable shadowing.
-      - shadow
-      - fieldalignment
-  stylecheck:
-    checks:
-      - all
-issues:
-  exclude-use-default: false
+  settings:
+    govet:
+      enable-all: true
+      disable:
+        # We don't care about variable shadowing.
+        - shadow
+        - fieldalignment
+formatters:
+  enable:
+    # Make code properly formatted.
+    - gofmt
